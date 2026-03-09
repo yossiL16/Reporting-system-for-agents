@@ -1,12 +1,22 @@
 import express from 'express';
 import fs from 'fs/promises';
 import { tokenExtractor } from '../utils/jwt.js';
-import { bodyInsertFormData } from '../middleware/validation.js';
+import { bodyInsertFormData, valideFromCsv } from '../middleware/validation.js';
 import multer from 'multer'
+import path from 'path'
+
 
 const reportsRouter = express();
 
-const storage = multer.memoryStorage();
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+    cb(null, 'uploads/')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname)
+  }
+});
 
 const fileFilter = (req, file, cb) => {
   const allowedExtensions = ["image/png", "image/jpg", "image/jpeg"];
@@ -18,11 +28,13 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-const upload = multer({ storage, fileFilter });
+const upload = multer({storage, fileFilter});
 
 
 
-reportsRouter.post('/', tokenExtractor, upload.single("image"),bodyInsertFormData, async (req, res) => {
+
+
+reportsRouter.post('/', tokenExtractor, upload.single("image"), bodyInsertFormData, async (req, res) => {
     try{
         const file = req.file;
         if (!file) {
@@ -43,7 +55,7 @@ reportsRouter.post('/', tokenExtractor, upload.single("image"),bodyInsertFormDat
             category,
             urgency,
             message,
-            imagePath: `data:${file.mimetype};base64,${file.buffer.toString('base64')}`,
+            imagePath: file.path,
             sourceType: "manual",
             date
         }
@@ -57,7 +69,11 @@ reportsRouter.post('/', tokenExtractor, upload.single("image"),bodyInsertFormDat
 })
 
 
-reportsRouter.post("/csv", (req,res) => {
+
+const uploadCsv = multer({ dest: 'uploads/' })
+
+reportsRouter.post("/csv", uploadCsv.single('file'), valideFromCsv, async (req,res) => {
+    
     
 })
 

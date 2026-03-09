@@ -10,7 +10,6 @@ export function bodyInsertFormData(req,res,next){
     if(!category || !urgency || !message) {return res.status(400).json({error: "MISSING_FIELDS"})};
     if(typeof category !== "string" || typeof urgency !== "string" || typeof message !== "string"){return res.status(400).json({error:"The type is incorrect."})}
     const {role} = req.user;
-    console.log(role);
     
     if(role !== 'admin' && role !== 'agent'){return res.status(401).json({message:"No entry permit"})} 
     next()
