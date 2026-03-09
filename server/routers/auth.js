@@ -13,6 +13,9 @@ authRouter.post('/login', bodyInsertionTest, (req,res) => {
     const {agentCode, password} = req.body;
     
     const agent = agents.find(ag => ag.agentCode === agentCode);
+    if(!agent){
+        return res.status(401).json({ message: "Incorrect login details" });
+    }
     const kode = verifyPassword(password, agent.passwordHash)
 
     if(!kode) return res.status(401).json({message: "Incorrect login details"})

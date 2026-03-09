@@ -6,7 +6,7 @@ export function createToken(paylod){
     let token = jwt.sign(
         paylod, 
         process.env.SECRET,
-        { expiresIn: "1h" }
+        { expiresIn: "30d" }
     )
     return token
 }
@@ -14,7 +14,7 @@ export function createToken(paylod){
 export function tokenExtractor(req,res,next){
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
-    if(token === null) return res.sendStatus(401)
+    if(!token) return res.sendStatus(401)
     jwt.verify(token, process.env.SECRET, (err, user) => {
         if (err) return res.status(403).json({err})
         req.user = user
