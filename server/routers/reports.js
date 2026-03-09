@@ -56,4 +56,9 @@ reportsRouter.post('/', tokenExtractor, upload.single("image"),bodyInsertFormDat
     }
 })
 
+
+reportsRouter.post("/csv", (req,res) => {
+    
+})
+
 export default reportsRouter
