@@ -125,19 +125,27 @@ reportsRouter.post("/csv", tokenExtractor ,uploadCsv.single('file'), valideFromC
 
 
 reportsRouter.get('/', tokenExtractor, async (req,res) => {
+
+    try {
     const querys = req.query;
-    const {role, agentCode} = req.user;
+    const {role, id} = req.user;
 
     const jsonData = await fs.readFile("./DB/reports.json", 'utf8');
     const data = await JSON.parse(jsonData);
     const listData = data.reports
 
-    const serchReport = getReportByRole(listData, role, agentCode, querys)
+    const serchReport = getReportByRole(listData, role, id, querys)
     if(serchReport.length === 0) {
         return res.status(400).json({message: "NO_REPORTS_FOUND"})
     }
     res.status(200).json({reports: serchReport})
+    } catch(e) {
+        console.log(e.message);
+    }
+})
 
+
+reportsRouter.get('/:id', (req,res) => {
 
 })
 
