@@ -39,7 +39,19 @@ adminRouter.post('/', tokenExtractor, async (req,res)=> {
 
     } catch(e){
         console.log(e.message);
-        
+    }
+})
+
+
+adminRouter.get('/',tokenExtractor,async (req, res) => {
+    const {role} = req.user;
+    if(role !== "admin"){return res.status(403).json({message: "The user is not an admin"})}
+    try{
+        const jsonData = await fs.readFile("./DB/agents.json", 'utf8');
+        const data = await JSON.parse(jsonData)
+        res.status(200).json({users: data.agents})
+    } catch(e){
+        console.log(e.message);
     }
 })
 
