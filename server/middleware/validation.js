@@ -20,3 +20,10 @@ export function valideFromCsv(req,res,next) {
     if(role !== 'admin' && role !== 'agent'){return res.status(401).json({message:"No entry permit"})} 
     next()
 }
+export function validationInAdmin(req,res,next) {
+    const {agentCode, fullName, role} = req.body;
+    if(!agentCode || !fullName || !role){
+        return res.status(400).json({message: "A required field is missing"})
+    }
+    next()
+}

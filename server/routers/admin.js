@@ -3,11 +3,12 @@ import { tokenExtractor } from '../utils/jwt.js';
 import { hashPassword } from '../utils/security.js';
 import atbash from '../utils/atbash.js';
 import fs from 'fs/promises';
+import { validationInAdmin } from '../middleware/validation.js';
 
 
 const adminRouter = express();
 
-adminRouter.post('/', tokenExtractor, async (req,res)=> {
+adminRouter.post('/', tokenExtractor, validationInAdmin, async (req,res)=> {
     const {role} = req.user;
     if(role !== "admin"){return res.status(403).json({message: "The user is not an admin"})} 
     try {
