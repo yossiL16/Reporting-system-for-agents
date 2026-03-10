@@ -4,6 +4,7 @@ import { tokenExtractor } from '../utils/jwt.js';
 import { bodyInsertFormData, valideFromCsv } from '../middleware/validation.js';
 import multer from 'multer'
 import loadData from '../utils/readeFileCsv.js';
+import getReportByRole from '../utils/serchReport.js';
 
 
 
@@ -112,15 +113,32 @@ reportsRouter.post("/csv", tokenExtractor ,uploadCsv.single('file'), valideFromC
         data.reports.push(report)
         await fs.writeFile("./DB/reports.json", JSON.stringify(data))
         }
-        res.status(200).json({
+        res.status(201).json({
             reports: dataCsv,
             importedCount: dataCsv.length
         })
         
     } catch(e){
         console.error({error: e.message});
-        
     }
+})
+
+
+reportsRouter.get('/', tokenExtractor, async (req,res) => {
+    const querys = req.query;
+    const {role, agentCode} = req.user;
+
+    const jsonData = await fs.readFile("./DB/reports.json", 'utf8');
+    const data = await JSON.parse(jsonData);
+    const listData = data.reports
+
+    const serchReport = getReportByRole(listData, role, agentCode, querys)
+    if(serchReport.length === 0) {
+        return res.status(400).json({message: "NO_REPORTS_FOUND"})
+    }
+    res.status(200).json({reports: serchReport})
+
+
 })
 
 export default reportsRouter
