@@ -145,8 +145,19 @@ reportsRouter.get('/', tokenExtractor, async (req,res) => {
 })
 
 
-reportsRouter.get('/:id', (req,res) => {
-
+reportsRouter.get('/:id', tokenExtractor, async (req,res) => {
+    try{
+        const {id} = req.params;
+        const jsonData = await fs.readFile("./DB/reports.json", 'utf8');
+        const data = await JSON.parse(jsonData);
+        const listData = data.reports
+        const report = listData.filter(report => Number(report.id) === Number(id))
+        if(report.length === 0) {return res.status(404).jsom({message: "The report does not exist"})}
+        res.status(200).json({report: report[0]})
+    } catch(e){
+        console.log(e.message);
+        
+    }
 })
 
 export default reportsRouter
