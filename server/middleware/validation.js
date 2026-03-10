@@ -18,5 +18,5 @@ export function bodyInsertFormData(req,res,next){
 export function valideFromCsv(req,res,next) {
     const {role} = req.user;
     if(role !== 'admin' && role !== 'agent'){return res.status(401).json({message:"No entry permit"})} 
-
+    next()
 }

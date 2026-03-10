@@ -2,7 +2,7 @@ import {readFile} from 'fs/promises';
 import {parse} from 'csv-parse/sync';
 
 
-export async function loadData(path) {
+export default async function loadData(path) {
     try {
 
         const data = await readFile(path, 'utf-8');
@@ -11,11 +11,9 @@ export async function loadData(path) {
             skip_empty_lines: true,
             trim: true
         });
-        return jsonData[0]
+        return jsonData
     } catch (err) {
-        console.error({'error': err,message});
+        console.error({'error': err.message});
     }
 }
 
-const x = await loadData();
-console.log(x);

@@ -3,7 +3,8 @@ import fs from 'fs/promises';
 import { tokenExtractor } from '../utils/jwt.js';
 import { bodyInsertFormData, valideFromCsv } from '../middleware/validation.js';
 import multer from 'multer'
-import path from 'path'
+import loadData from '../utils/readeFileCsv.js';
+
 
 
 const reportsRouter = express();
@@ -70,11 +71,56 @@ reportsRouter.post('/', tokenExtractor, upload.single("image"), bodyInsertFormDa
 
 
 
-const uploadCsv = multer({ dest: 'uploads/' })
+const storageCsv = multer.diskStorage({
+    destination: function (req,file,cd) {
+        return cd(null, "./uploads")
+    },
+    filename: function (req,file,cd) {
+        cd(null, file.originalname)
+    }
+})
 
-reportsRouter.post("/csv", uploadCsv.single('file'), valideFromCsv, async (req,res) => {
-    
-    
+const uploadCsv = multer({storage: storageCsv})
+
+reportsRouter.post("/csv", tokenExtractor ,uploadCsv.single('file'), valideFromCsv, async (req,res) => {
+    if(!req.file){return res.status(400).json({message: "FILE_NOT_SENT"})}
+    try {
+        const path = `./uploads/${req.file.filename}`
+        const dataCsv = await loadData(path)
+        const title = dataCsv[0]
+        if((!("category" in title)) || (!('urgency' in title)) || (!('message' in title))) {
+            return res.status(400).json({message: "CSV_FILE_ISINVALID"})
+        }
+
+        const jsonData = await fs.readFile("./DB/reports.json", 'utf8');
+        const data = await JSON.parse(jsonData)
+        const id = (data.reports?.length || 0) + 1;
+        const agentId = req.user.id
+        const date = new Date().toLocaleDateString()
+
+        for(let p of dataCsv) {
+            const report = {
+            id,
+            agentId,
+            category: p.category,
+            urgency: p.urgency,
+            message: p.message,
+            imagePath: p.path,
+            sourceType: "csvFile",
+            date
+        }
+        data.reports.push(report)
+        await fs.writeFile("./DB/reports.json", JSON.stringify(data))
+        }
+        res.status(200).json({
+            reports: dataCsv,
+            importedCount: dataCsv.length
+        })
+        
+    } catch(e){
+        console.error({error: e.message});
+        
+    }
 })
 
 export default reportsRouter
