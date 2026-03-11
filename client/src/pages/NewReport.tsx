@@ -30,7 +30,6 @@ export default function NewReport() {
         const token = localStorage.getItem('token');
         const user = localStorage.getItem('user') || "{}";
 
-        const jsonuser : User = JSON.parse(user)
         const result = await fetch('http://localhost:3000/reports', {
           method: 'post',
           headers: {
@@ -41,7 +40,9 @@ export default function NewReport() {
         const data = await result.json();
         if(result.ok){
           alert(`The message was sent successfully. ID: ${data.id}`)
-          navigate(jsonuser.role === 'admin' ? '/admin-dashboard': '/agent-dashboard')
+          navigate(user.role === 'admin' ? '/admin-dashboard': '/agent-dashboard')
+        } else{
+          alert(data.message)
         }
       } catch(e) {
         if(e instanceof Error){
