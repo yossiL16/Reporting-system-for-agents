@@ -15,7 +15,7 @@ adminRouter.post('/', tokenExtractor, validationInAdmin, async (req,res)=> {
         const {agentCode, fullName, role} = req.body;
 
         const reversName = atbash(fullName);
-        const hashPass = hashPassword(reversName);
+        const hashPass = await hashPassword(reversName);
 
         const jsonData = await fs.readFile("./DB/agents.json", 'utf8');
         const data = await JSON.parse(jsonData)

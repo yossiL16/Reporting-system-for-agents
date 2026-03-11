@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom"
 export default function Login() {
 
     const navigate = useNavigate() 
-
     const [agentCode, setAgentCode] = useState<string>("")
     const [password, setPassword] = useState<string>("")    
 
@@ -22,17 +21,15 @@ export default function Login() {
             localStorage.setItem('token', data.token)
             localStorage.setItem('user', data.user)
             if(data.user.role === 'admin'){
-                navigate('/admin_dashboard')
+                navigate('/admin-dashboard')
             } else {
-                navigate('/agent_dashboard')
+                navigate('/agent-dashboard')
             }
-            
         }
         else {
             alert(data.message)
         }
     }
-
 
   return (
     <div>

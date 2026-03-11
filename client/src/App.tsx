@@ -16,13 +16,13 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Login />} />
-        <Route path='/agent_dashboard' element={<AgentDashboard />}/>
-        <Route path='/new_report' element={<NewReport />}/>
-        <Route path='/csv_upload' element={<CsvUpload />}/>
-        <Route path='/my_reports' element={<MyReports />}/>
-        <Route path='/admin_dashboard' element={<AdminDashboard />}/>
-        <Route path='/admin_users' element={<AdminUsers />}/>
-        <Route path='/admin_reports' element={<AdminReports />}/>
+        <Route path='/agent-dashboard' element={<AgentDashboard />}/>
+        <Route path='/new-report' element={<NewReport />}/>
+        <Route path='/csv-upload' element={<CsvUpload />}/>
+        <Route path='/my-reports' element={<MyReports />}/>
+        <Route path='/admin-dashboard' element={<AdminDashboard />}/>
+        <Route path='/admin-users' element={<AdminUsers />}/>
+        <Route path='/admin-reports' element={<AdminReports />}/>
       </Routes>
     </BrowserRouter>
   )
