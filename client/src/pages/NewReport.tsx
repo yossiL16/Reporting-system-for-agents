@@ -1,12 +1,13 @@
 import { useState } from "react"
-import { Navigate, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
+import type { User, Category, Urgency } from "../typs/type"
 
 export default function NewReport() {
 
   const navigate = useNavigate()
 
-  const [category, setCategory] = useState<string>("intelligence")
-  const [urgency, setUrgency] = useState<string>("high")
+  const [category, setCategory] = useState<Category>("intelligence")
+  const [urgency, setUrgency] = useState<Urgency>("high")
   const [message, setMessage] = useState<string>("")
   const [file, setFile] = useState<File | null>(null)
 
@@ -26,8 +27,10 @@ export default function NewReport() {
       formData.append('image', file);
        }
       try {
-        const token = localStorage.getItem('token')
-        const user = localStorage.getItem('user')
+        const token = localStorage.getItem('token');
+        const user = localStorage.getItem('user') || "{}";
+
+        const jsonuser : User = JSON.parse(user)
         const result = await fetch('http://localhost:3000/reports', {
           method: 'post',
           headers: {
@@ -37,11 +40,13 @@ export default function NewReport() {
         });
         const data = await result.json();
         if(result.ok){
-          alert('The message was sent successfully.')
-          navigate(user.role === 'admin' ? '/admin-dashboard': '/agent-dashboard')
+          alert(`The message was sent successfully. ID: ${data.id}`)
+          navigate(jsonuser.role === 'admin' ? '/admin-dashboard': '/agent-dashboard')
         }
       } catch(e) {
+        if(e instanceof Error){
         console.log(e.message);
+        }
       }
    
   }
@@ -50,7 +55,7 @@ export default function NewReport() {
     <div>
       <div>
         <label>category: </label>
-        <select name="category" id="category" onChange={e => setCategory(e.target.value)} value={category}>
+        <select name="category" id="category" onChange={e => setCategory(e.target.value as Category)} value={category}>
           <option value="intelligence">intelligence</option>
           <option value="logistics">logistics</option>
           <option value="alert">alert</option>
@@ -59,7 +64,7 @@ export default function NewReport() {
       
       <div>
         <label>urgency: </label>
-          <select name="urgency" id="urgency" onChange={e => setUrgency(e.target.value)} value={category}>
+          <select name="urgency" id="urgency" onChange={e => setUrgency(e.target.value as Urgency)} value={category}>
           <option value="high">high</option>
           <option value="medium">medium</option>
           <option value="low">low</option>
