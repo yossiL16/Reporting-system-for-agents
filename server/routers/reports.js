@@ -32,16 +32,12 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({storage, fileFilter});
 
-
-
-
-
 reportsRouter.post('/', tokenExtractor, upload.single("image"), bodyInsertFormData, async (req, res) => {
     try{
         const file = req.file;
-        if (!file) {
-            return res.status(400).send("No file uploaded or file type not allowed");
-        }
+        // if (!file) {
+        //     return res.status(400).send("No file uploaded or file type not allowed");
+        // }
         if((file.size / 1024) > 600) return res.status(413).json({message:"The file is too heavy"})
         
         const jsonData = await fs.readFile("./DB/reports.json", 'utf8');
@@ -57,7 +53,7 @@ reportsRouter.post('/', tokenExtractor, upload.single("image"), bodyInsertFormDa
             category,
             urgency,
             message,
-            imagePath: file.path,
+            imagePath: file ? file.path : "",
             sourceType: "manual",
             date
         }
