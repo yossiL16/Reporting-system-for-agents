@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import type { User, Category, Urgency } from "../typs/type"
 
+
 export default function NewReport() {
 
   const navigate = useNavigate()
@@ -84,11 +85,6 @@ export default function NewReport() {
       <br />
 
       <button onClick={sendMessage}>Send</button>
-      <p>c:  {category}</p>
-      <br />
-      <p>u:  {urgency}</p>
-      <br />
-      <p>m: {message}</p>
     </div>
   )
 }

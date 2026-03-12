@@ -7,7 +7,7 @@ export interface User {
   createdAt : string
 }
 
-export type Category = "intelligence" | "logistics" | "alert";
+export type Category = "intelligence" | "logistics" | "alert" | "";
 
-export type Urgency = "high" | "medium" | "low";
+export type Urgency = "high" | "medium" | "low" | "";
 

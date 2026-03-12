@@ -35,9 +35,6 @@ const upload = multer({storage, fileFilter});
 reportsRouter.post('/', tokenExtractor, upload.single("image"), bodyInsertFormData, async (req, res) => {
     try{
         const file = req.file;
-        // if (!file) {
-        //     return res.status(400).send("No file uploaded or file type not allowed");
-        // }
         if((file.size / 1024) > 600) return res.status(413).json({message:"The file is too heavy"})
         
         const jsonData = await fs.readFile("./DB/reports.json", 'utf8');
@@ -93,7 +90,6 @@ reportsRouter.post("/csv", tokenExtractor ,uploadCsv.single('file'), valideFromC
         const data = await JSON.parse(jsonData)
         const id = (data.reports?.length || 0) + 1;
         const agentId = req.user.id
-        const date = new Date().toLocaleDateString()
 
         for(let p of dataCsv) {
             const report = {
@@ -104,7 +100,7 @@ reportsRouter.post("/csv", tokenExtractor ,uploadCsv.single('file'), valideFromC
             message: p.message,
             imagePath: p.path,
             sourceType: "csvFile",
-            date
+            date: new Date().toLocaleDateString()
         }
         data.reports.push(report)
         await fs.writeFile("./DB/reports.json", JSON.stringify(data))
@@ -132,7 +128,7 @@ reportsRouter.get('/', tokenExtractor, async (req,res) => {
 
     const serchReport = getReportByRole(listData, role, id, querys)
     if(serchReport.length === 0) {
-        return res.status(400).json({message: "NO_REPORTS_FOUND"})
+        return res.status(200).json({reports: []})
     }
     res.status(200).json({reports: serchReport})
     } catch(e) {

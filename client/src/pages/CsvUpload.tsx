@@ -33,7 +33,7 @@ export default function CsvUpload() {
         });
         const data = await result.json();
         if(result.ok){
-          alert(`The file was sent successfully. ID: ${data.id}`)
+          alert(`The file was sent successfully. `)
           navigate(user.role === 'admin' ? '/admin-dashboard': '/agent-dashboard')
         }
         else{
