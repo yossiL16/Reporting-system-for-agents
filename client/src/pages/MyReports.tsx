@@ -11,6 +11,7 @@ export default function MyReports() {
 
   const token = localStorage.getItem('token')
   const user = localStorage.getItem('user') || '{}'
+  const parseUser = JSON.parse(user)
 
   async function resData(){
     const params = new URLSearchParams();
@@ -61,7 +62,7 @@ useEffect(() =>{
         </select>
       </div>
 
-      {user.role === "admin" && <div>
+      {parseUser.role === "admin" && <div>
         <label htmlFor="">Agent Code: </label>
         <input type="text" value={agentCode} onChange={e => setAgentCode(e.target.value)} placeholder="Search by agentCode..."/>
       </div>}

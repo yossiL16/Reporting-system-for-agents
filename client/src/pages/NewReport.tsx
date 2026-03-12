@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import type { User, Category, Urgency } from "../typs/type"
+import type { Category, Urgency } from "../typs/type"
 
 
 export default function NewReport() {
@@ -30,6 +30,8 @@ export default function NewReport() {
       try {
         const token = localStorage.getItem('token');
         const user = localStorage.getItem('user') || "{}";
+        const parseUser = JSON.parse(user)
+
 
         const result = await fetch('http://localhost:3000/reports', {
           method: 'post',
@@ -41,7 +43,7 @@ export default function NewReport() {
         const data = await result.json();
         if(result.ok){
           alert(`The message was sent successfully. ID: ${data.id}`)
-          navigate(user.role === 'admin' ? '/admin-dashboard': '/agent-dashboard')
+          navigate(parseUser.role === 'admin' ? '/admin-dashboard': '/agent-dashboard')
         } else{
           alert(data.message)
         }

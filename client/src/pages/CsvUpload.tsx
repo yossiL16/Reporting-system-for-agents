@@ -22,6 +22,7 @@ export default function CsvUpload() {
       try {  
       const token = localStorage.getItem('token');
       const user = localStorage.getItem('user') || "{}";
+      const parseUser = JSON.parse(user)
     
       const result = await fetch('http://localhost:3000/reports/csv', {
           method: 'post',
@@ -33,7 +34,7 @@ export default function CsvUpload() {
         const data = await result.json();
         if(result.ok){
           alert(`The file was sent successfully. `)
-          navigate(user.role === 'admin' ? '/admin-dashboard': '/agent-dashboard')
+          navigate(parseUser.role === 'admin' ? '/admin-dashboard': '/agent-dashboard')
         }
         else{
           alert(data.message)
