@@ -1,13 +1,13 @@
-
-export default function CardAgents(props) {
+import type { CardAgentsProps } from "../typs/type"
+export default function CardAgents({item}: CardAgentsProps) {
   return (
     <tr className="card">
-        <td>{props.item.id}</td>
-        <td>{props.item.agentCode}</td>
-        <td>{props.item.fullName}</td>
-        <td>{props.item.passwordHash}</td>
-        <td>{props.item.role}</td>
-        <td>{props.item.createdAt}</td>
+        <td>{item.id}</td>
+        <td>{item.agentCode}</td>
+        <td>{item.fullName}</td>
+        <td>{item.passwordHash}</td>
+        <td>{item.role}</td>
+        <td>{item.createdAt}</td>
     </tr>
   )
 }
