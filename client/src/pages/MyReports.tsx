@@ -63,7 +63,7 @@ useEffect(() =>{
 
       {user.role === "admin" && <div>
         <label htmlFor="">Agent Code: </label>
-        <input type="text" value={agentCode} onChange={e => setAgentCode(e.target.value)} placeholder="Serch by agentCode..."/>
+        <input type="text" value={agentCode} onChange={e => setAgentCode(e.target.value)} placeholder="Search by agentCode..."/>
       </div>}
 
       <table className="table" style={{marginTop:'4px'}}>
