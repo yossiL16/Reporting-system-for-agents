@@ -40,7 +40,6 @@ reportsRouter.post('/', tokenExtractor, upload.single("image"), bodyInsertFormDa
         const jsonData = await fs.readFile("./DB/reports.json", 'utf8');
         const data = await JSON.parse(jsonData) 
 
-        const date = new Date().toLocaleDateString()
         const {category, urgency, message} = req.body;
         const id = (data.reports?.length || 0) + 1;
         const agentId = req.user.id
@@ -52,7 +51,7 @@ reportsRouter.post('/', tokenExtractor, upload.single("image"), bodyInsertFormDa
             message,
             imagePath: file ? file.path : "",
             sourceType: "manual",
-            date
+            date: new Date().toISOString()
         }
         data.reports.push(report)
         await fs.writeFile("./DB/reports.json", JSON.stringify(data))
@@ -100,7 +99,7 @@ reportsRouter.post("/csv", tokenExtractor ,uploadCsv.single('file'), valideFromC
             message: p.message,
             imagePath: p.path,
             sourceType: "csvFile",
-            date: new Date().toLocaleDateString()
+            date: new Date().toISOString()
         }
         data.reports.push(report)
         await fs.writeFile("./DB/reports.json", JSON.stringify(data))
