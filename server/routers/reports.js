@@ -123,10 +123,10 @@ reportsRouter.get('/', tokenExtractor, async (req,res) => {
     const {role, id} = req.user;
 
     const jsonData = await fs.readFile("./DB/reports.json", 'utf8');
-    const data = await JSON.parse(jsonData);
+    const data = JSON.parse(jsonData);
     const listData = data.reports
 
-    const serchReport = getReportByRole(listData, role, id, querys)
+    const serchReport = await getReportByRole(listData, role, id, querys)
     if(serchReport.length === 0) {
         return res.status(200).json({reports: []})
     }

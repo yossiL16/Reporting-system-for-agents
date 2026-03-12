@@ -40,6 +40,7 @@ adminRouter.post('/', tokenExtractor, validationInAdmin, async (req,res)=> {
 
     } catch(e){
         console.log(e.message);
+        res.status(500).json({message:"There is a problem with the server. Please try again later."})
     }
 })
 

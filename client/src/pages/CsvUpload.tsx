@@ -1,5 +1,4 @@
 import { useState } from "react"
-import type { User } from "../typs/type";
 import { useNavigate } from "react-router-dom";
 
 export default function CsvUpload() {

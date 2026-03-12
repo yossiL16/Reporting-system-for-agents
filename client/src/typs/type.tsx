@@ -11,3 +11,4 @@ export type Category = "intelligence" | "logistics" | "alert" | "";
 
 export type Urgency = "high" | "medium" | "low" | "";
 
+export type Role = 'agent' | 'admin'
