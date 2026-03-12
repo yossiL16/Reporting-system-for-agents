@@ -28,6 +28,8 @@ export default function MyReports() {
   setData(result.reports)
     } 
 catch(err){
+  if(typeof err === "object"
+    && err && "message" in err)
   console.error(err.message);
   }
 }
@@ -42,7 +44,7 @@ useEffect(() =>{
 <div>
         <label>category: </label>
         <select name="category" id="category" onChange={e => setCategory(e.target.value as Category)} value={category}>
-          <option value="" disabled>select category</option>
+          <option value="" >all</option>
           <option value="intelligence">intelligence</option>
           <option value="logistics">logistics</option>
           <option value="alert">alert</option>
@@ -52,7 +54,7 @@ useEffect(() =>{
       <div>
         <label>urgency: </label>
           <select name="urgency" id="urgency" onChange={e => setUrgency(e.target.value as Urgency)} value={urgency}>
-          <option value="" disabled>select urgency</option>
+          <option value="" >all</option>
           <option value="high">high</option>
           <option value="medium">medium</option>
           <option value="low">low</option>
